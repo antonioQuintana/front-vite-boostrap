@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 const AppFooter = () => {
@@ -10,7 +9,7 @@ const AppFooter = () => {
           <Col className="text-center">
             {/* m-0 elimina el margin inferior predeterminado del párrafo */}
             <p className="m-0">
-              © 2024 Mi Sitio Web. Todos los derechos reservados.
+              © 2025 Mi Sitio Web. Todos los derechos reservados.
               <br />
               Maquetado con Vite, React Router DOM y React Bootstrap.
             </p>

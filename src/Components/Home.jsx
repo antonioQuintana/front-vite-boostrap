@@ -1,27 +1,65 @@
-import React from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "../AuthComponents/LoginButton";
+import LogoutButton from "../AuthComponents/LogoutButton";
+import Profile from "../AuthComponents/Profile";
 
 const Home = () => {
+  const { isAuthenticated, isLoading, error } = useAuth0();
+  if (isLoading) {
+    return (
+      <div className="app-container">
+        <div className="loading-state">
+          <div className="loading-text">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="app-container">
+        <div className="error-state">
+          <div className="error-title">Oops!</div>
+          <div className="error-message">Something went wrong</div>
+          <div className="error-sub-message">{error.message}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Container className="mt-4">
-      <Row>
-        <Col>
-          <h1>Página de Inicio</h1>
-          <p>Bienvenido a nuestra web con React Router y React Bootstrap.</p>
-          <Button variant="primary">Botón de Bootstrap</Button>
-        </Col>
-      </Row>
-      <Row className="mt-4">
-        <Col md={4}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Maquetación Rápida</Card.Title>
-              <Card.Text>Usando componentes de React Bootstrap.</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+    <div className="app-container">
+      <div className="main-card-wrapper">
+        <img
+          src="https://cdn.auth0.com/quantum-assets/dist/latest/logos/auth0/auth0-lockup-en-ondark.png"
+          alt="Auth0 Logo"
+          className="auth0-logo"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+        <h1 className="main-title">Bienvenido a CtesWheels</h1>
+
+        {isAuthenticated ? (
+          <div className="logged-in-section">
+            <div className="logged-in-message">
+              ✅ Sesión inciada con éxito!
+            </div>
+            <h2 className="profile-section-title">Tu Perfil</h2>
+            <div className="profile-card">
+              <Profile />
+            </div>
+            <LogoutButton />
+          </div>
+        ) : (
+          <div className="action-card">
+            <p className="action-text">Para empezar ingresa con tu cuenta</p>
+            <LoginButton />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
