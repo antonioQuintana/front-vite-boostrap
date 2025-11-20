@@ -1,10 +1,11 @@
-import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "../AuthComponents/LoginButton";
 import LogoutButton from "../AuthComponents/LogoutButton";
 import Profile from "../AuthComponents/Profile";
 
+
 const Home = () => {
+
   const { isAuthenticated, isLoading, error } = useAuth0();
   if (isLoading) {
     return (

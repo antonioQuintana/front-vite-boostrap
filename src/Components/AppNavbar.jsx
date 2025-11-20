@@ -5,9 +5,12 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
 
 function AppNavbar() {
   const { logout } = useAuth0();
+  const user = useSelector(state => state.user);
+  console.log(user);
   return (
     <Navbar expand="md" data-bs-theme="dark" className="bg-body-tertiary">
       <Container fluid>
@@ -41,7 +44,7 @@ function AppNavbar() {
               </NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="#" disabled>
-              Hola (Nombre) !
+              Bienvenido {user == null ? "" : user.name} !
             </Nav.Link>
           </Nav>
           <Form className="d-flex">

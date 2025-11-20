@@ -1,14 +1,9 @@
-import { useState, useEffect } from 'react'
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 function Productos() {
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        fetch('https://fakestoreapi.com/products')
-            .then(res => res.json())
-            .then(data => setProducts(data));
-    }, []);
+    const products = useSelector(state => state.products);
+    console.log(products);
 
     return (
         <Container className="py-5">

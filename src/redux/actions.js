@@ -1,0 +1,41 @@
+/* ¿que son la acciones?
+ * Son la unica forma de poder enviar informacion o datos
+ * desde cada componente al store a traves de redux
+ * tipo de accion
+ * ¿que es el payload? Es el dato que se envia 
+ */
+export const GET_USERS = "GET_USERS";
+export const GET_PRODUCTS = "GET_PRODUCTS";
+
+import axios from "axios";
+
+export const getUsers = () => {
+    return async (dispatch) => {
+        const users = (await axios.get("https://jsonplaceholder.typicode.com/users")).data
+        dispatch({
+            type: GET_USERS,
+            payload: users
+        })/*Dispatch es un metodo que solicita la actualizacion del estado en redux, 
+            despacha la accion al reducer */
+    };
+};
+
+export const getProducts = () => {
+    return async (dispatch) => {
+        const products = (await axios.get("https://fakestoreapi.com/products")).data
+        dispatch({
+            type: GET_PRODUCTS,
+            payload: products
+        })
+    };
+};
+
+export const SET_USER = "SET_USER";
+
+export const setUser = (user) => {
+    return {
+        type: SET_USER,
+        payload: user
+    }
+};
+

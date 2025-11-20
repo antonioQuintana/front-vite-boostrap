@@ -5,9 +5,29 @@ import About from "./Components/About";
 import AppFooter from "./Components/AppFooter";
 import "./App.css";
 import Productos from "./Pages/Productos";
-
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getUsers, getProducts, setUser } from "./redux/actions";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
+  const { user, isAuthenticated } = useAuth0();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUsers());
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const userData = {
+        ...user,
+        isAdmin: user.email === 'admin@ejemplo.com'
+      };
+      dispatch(setUser(userData));
+    }
+  }, [isAuthenticated, user, dispatch]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
