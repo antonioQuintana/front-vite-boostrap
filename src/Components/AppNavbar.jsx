@@ -7,11 +7,14 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function AppNavbar() {
-  const { logout } = useAuth0();
+  const { logout, user, isAuthenticated } = useAuth0();
   return (
-    <Navbar expand="md" data-bs-theme="dark" className="bg-body-tertiary">
+    <Navbar expand="md" className="navbar-dark">
       <Container fluid>
-        <Navbar.Brand href="/">CtesWheels</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <span style={{ color: 'var(--hw-yellow)' }}>Ctes</span>
+          <span style={{ color: 'var(--hw-white)' }}>Wheels</span>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -21,37 +24,39 @@ function AppNavbar() {
           >
             <Nav.Link href="/tienda">Tienda</Nav.Link>
             <Nav.Link href="/carrito">Carrito</Nav.Link>
-            <NavDropdown title="Perfil" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="/compras">Mis Compras</NavDropdown.Item>
-              <NavDropdown.Item href="/notificaciones">
-                Notificaciones
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/mi-perfil">
-                Editar Perfil
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item
-                href="/"
-                onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
-                }
-                className="button logout"
-              >
-                Cerrar Sesión
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Hola (Nombre) !
-            </Nav.Link>
+            {isAuthenticated && (
+              <NavDropdown title={user?.name || "Perfil"} id="navbarScrollingDropdown">
+                <NavDropdown.Item href="/compras">Mis Compras</NavDropdown.Item>
+                <NavDropdown.Item href="/notificaciones">
+                  Notificaciones
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/mi-perfil">
+                  Editar Perfil
+                </NavDropdown.Item>
+                {/* Mock Admin Link - In real app check roles */}
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/admin">Admin Dashboard</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item
+                  href="/"
+                  onClick={() =>
+                    logout({ logoutParams: { returnTo: window.location.origin } })
+                  }
+                  className="text-danger"
+                >
+                  Cerrar Sesión
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
           </Nav>
           <Form className="d-flex">
             <Form.Control
               type="search"
-              placeholder="Buscar"
+              placeholder="Buscar auto..."
               className="me-2"
               aria-label="Search"
             />
-            <Button variant="outline-success">Buscar</Button>
+            <Button variant="warning">BUSCAR</Button>
           </Form>
         </Navbar.Collapse>
       </Container>
