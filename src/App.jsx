@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { getUsers, getProducts, setUser } from "./redux/actions";
 import { useAuth0 } from "@auth0/auth0-react";
 import ProductForm from "./Components/productForm/productForm";
-import NotFound from "./Components/PagNotFound/NotFound";
+import NotFound from "./Components/PagNotFound/NotFoundPage";
 
 function App() {
   const { user, isAuthenticated } = useAuth0();

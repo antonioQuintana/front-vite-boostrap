@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import NotFound from '../PagNotFound/NotFound';
+import NotFound from '../PagNotFound/NotFoundPage';
 
 const ProductForm = () => {
     const user = useSelector(state => state.user);
