@@ -1,19 +1,22 @@
 /**
 /**
+/**
+/**
  * ¿que es un reducer?
  * Es una funcion que recibe dos parametros
  * 1. El estado actual
  * 2. La accion
  * 
  */
-import { GET_USERS, GET_PRODUCTS, SET_USER } from "./actions";
+import { GET_USERS, GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE } from "./actions";
 
 const initialState = {
     users: [],
     copyUsers: [],
     products: [],
     copyProducts: [],
-    user: null // Aquí guardaremos al usuario logueado
+    user: null,
+    currentPage: 1 // Página actual global
 }
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -33,6 +36,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.payload
+            }
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.payload
             }
         default:
             return { ...state }

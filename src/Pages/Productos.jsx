@@ -1,9 +1,38 @@
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentPage } from '../redux/actions';
+import CardComp from '../Components/card/CardComp';
+import ProductsPag from '../Components/productsPag/ProductsPag';
 
 function Productos() {
+    const dispatch = useDispatch();
     const products = useSelector(state => state.products);
-    console.log(products);
+    const currentPage = useSelector(state => state.currentPage);
+
+    // 1. Definir items por página
+    const [itemsPerPage] = useState(8);
+
+    // 2. Calcular índices para el slice
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+    // 3. Obtener los productos actuales
+    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+
+    // 4. Función para cambiar de página
+    const paginate = (pageNumber) => {
+        dispatch(setCurrentPage(pageNumber));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    if (products.length === 0) {
+        return (
+            <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+                <Spinner animation="border" variant="warning" />
+            </Container>
+        );
+    }
 
     return (
         <Container className="py-5">
@@ -11,37 +40,19 @@ function Productos() {
                 Catálogo Oficial
             </h2>
             <Row>
-                {products.map(product => (
+                {currentProducts.map(product => (
                     <Col key={product.id} md={4} lg={3} className="mb-4">
-                        <Card className="h-100">
-                            <Card.Img
-                                variant="top"
-                                src={product.image}
-                                style={{ height: '200px', objectFit: 'contain', padding: '10px' }}
-                            />
-                            <Card.Body className="d-flex flex-column">
-                                <Card.Title>{product.title}</Card.Title>
-                                <Card.Text className="text-muted small">
-                                    {product.category}
-                                </Card.Text>
-                                <Card.Text>
-                                    {product.description.length > 40
-                                        ? product.description.substring(0, 40) + '...'
-                                        : product.description}
-                                </Card.Text>
-                                <div className="mt-auto d-flex justify-content-between align-items-center">
-                                    <h5 className="mb-0 text-hw-blue">${product.price}</h5>
-                                    <Button variant="primary" size="sm">
-                                        Agregar +
-                                    </Button>
-                                </div>
-                            </Card.Body>
-                        </Card>
+                        <CardComp product={product} />
                     </Col>
                 ))}
             </Row>
+            <ProductsPag
+                itemsPerPage={itemsPerPage}
+                totalItems={products.length}
+                paginate={paginate}
+                currentPage={currentPage}
+            />
         </Container>
     )
 }
-
 export default Productos

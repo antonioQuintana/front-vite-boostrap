@@ -39,3 +39,12 @@ export const setUser = (user) => {
     }
 };
 
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+
+export const setCurrentPage = (page) => {
+    return {
+        type: SET_CURRENT_PAGE,
+        payload: page
+    }
+};
+
