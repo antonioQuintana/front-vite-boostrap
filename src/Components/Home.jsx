@@ -59,7 +59,7 @@ const Home = () => {
               <div className="profile-card">
                 <Profile />
               </div>
-              <LogoutButton />
+              <Button variant="primary" size="sm" className="mx-5 my-3 fs-4 shadow-lg"><LogoutButton /></Button>
             </div>
           ) : (
             <div className="action-card">

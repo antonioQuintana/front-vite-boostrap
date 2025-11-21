@@ -4,12 +4,11 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import LogoutButton from "../AuthComponents/LogoutButton";
 
 function AppNavbar() {
-  const { logout } = useAuth0();
   const user = useSelector(state => state.user);
 
   return (
@@ -28,28 +27,26 @@ function AppNavbar() {
           >
             <Nav.Link as={Link} to="/tienda">Tienda</Nav.Link>
             <Nav.Link as={Link} to="/carrito">Carrito</Nav.Link>
-            <NavDropdown title="Perfil" id="navbarScrollingDropdown">
-              <NavDropdown.Item as={Link} to="/compras">Mis Compras</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/notificaciones">
-                Notificaciones
-              </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/mi-perfil">
-                Editar Perfil
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item
-                href="/"
-                onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
-                }
-                className="button logout"
-              >
-                Cerrar Sesión
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#" disabled>
+
+            {user != null ? (
+              <NavDropdown title="Perfil" id="navbarScrollingDropdown">
+                <NavDropdown.Item as={Link} to="/compras">Mis Compras</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/notificaciones">
+                  Notificaciones
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/mi-perfil">
+                  Editar Perfil
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <LogoutButton />
+              </NavDropdown>
+            ) : null}
+            {user != null && user.isAdmin ? (
+              <Nav.Link as={Link} to="/admin">Admin</Nav.Link>
+            ) : <Nav.Link href="#" disabled>
               Bienvenido {user == null ? "" : user.name} !
-            </Nav.Link>
+            </Nav.Link>}
+
           </Nav>
           <Form className="d-flex">
             <Form.Control
