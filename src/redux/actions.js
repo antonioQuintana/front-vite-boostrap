@@ -22,11 +22,17 @@ export const getUsers = () => {
 
 export const getProducts = () => {
     return async (dispatch) => {
-        const products = (await axios.get("https://fakestoreapi.com/products")).data
-        dispatch({
-            type: GET_PRODUCTS,
-            payload: products
-        })
+        try {
+            const response = await axios.get("/api/products");
+            const products = response.data;
+            dispatch({
+                type: GET_PRODUCTS,
+                payload: products
+            });
+        } catch (error) {
+            console.error("Error al obtener productos:", error);
+            // Opcional: Podrías despachar una acción de error aquí si tuvieras una
+        }
     };
 };
 

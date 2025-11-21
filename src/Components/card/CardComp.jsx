@@ -15,11 +15,11 @@ function CardComp({ product }) {
         <Card className="h-100">
             <Card.Img
                 variant="top"
-                src={product.image}
+                src={product.imgDir}
                 style={{ height: '200px', objectFit: 'contain', padding: '10px' }}
             />
             <Card.Body className="d-flex flex-column">
-                <Card.Title>{product.title}</Card.Title>
+                <Card.Title>{product.name}</Card.Title>
                 <Card.Text className="text-muted small">
                     {product.category}
                 </Card.Text>
@@ -39,4 +39,4 @@ function CardComp({ product }) {
     )
 }
 
-export default CardComp
+export default CardComp;

@@ -47,7 +47,7 @@ const reducer = (state = initialState, action) => {
                 cart: action.payload,
             } */
         case ADD_TO_CART:
-            console.log(action)
+
             const itemInCart = state.cart.find(item => item.id === action.payload.id);
             let newCart;
             if (itemInCart) {

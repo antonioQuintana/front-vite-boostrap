@@ -6,12 +6,12 @@ import { removeFromCart, clearCart } from '../../redux/actions';
 const Carrito = () => {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
-    console.log(cart)
+
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    const handleRemove = (id) => {
-        dispatch(removeFromCart(id));
+    const handleRemove = (_id) => {
+        dispatch(removeFromCart(_id));
     };
 
     const handleClear = () => {
@@ -45,15 +45,15 @@ const Carrito = () => {
                     </thead>
                     <tbody>
                         {cart.map(item => (
-                            <tr key={item.id}>
+                            <tr key={item._id}>
                                 <td>
                                     <div className="d-flex align-items-center">
                                         <img
-                                            src={item.image}
-                                            alt={item.title}
+                                            src={item.imgDir}
+                                            alt={item.name}
                                             style={{ width: '50px', marginRight: '10px' }}
                                         />
-                                        {item.title}
+                                        {item.name}
                                     </div>
                                 </td>
                                 <td>${item.price}</td>

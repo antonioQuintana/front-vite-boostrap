@@ -41,7 +41,7 @@ function Productos() {
             </h2>
             <Row>
                 {currentProducts.map(product => (
-                    <Col key={product.id} md={4} lg={3} className="mb-4">
+                    <Col key={product._id} md={4} lg={3} className="mb-4">
                         <CardComp product={product} />
                     </Col>
                 ))}

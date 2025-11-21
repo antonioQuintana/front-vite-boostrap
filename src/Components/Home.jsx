@@ -82,7 +82,7 @@ const Home = () => {
         </h2>
         <Row>
           {featuredProducts.map(product => (
-            <Col key={product.id} md={4} className="mb-4">
+            <Col key={product._id} md={4} className="mb-4">
               <CardComp product={product} />
             </Col>
           ))}
@@ -93,4 +93,3 @@ const Home = () => {
 };
 
 export default Home;
-/*  */

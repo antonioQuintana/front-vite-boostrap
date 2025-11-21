@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 function AppNavbar() {
   const { logout } = useAuth0();
   const user = useSelector(state => state.user);
-  console.log(user);
+
   return (
     <Navbar expand="md" className="navbar-dark">
       < Container fluid >
