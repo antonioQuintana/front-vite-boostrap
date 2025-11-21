@@ -36,17 +36,17 @@ const Profile = () => {
         }}
       />
       <div style={{ textAlign: "center" }}>
-        <div
+        <h4
           className="profile-name"
           style={{
             fontSize: "2rem",
             fontWeight: "600",
-            color: "#295527ff",
+            color: "#0ac700ff",
             marginBottom: "0.5rem",
           }}
         >
           {user.name}
-        </div>
+        </h4>
         <div
           className="profile-email"
           style={{ fontSize: "1.15rem", color: "#a0aec0" }}

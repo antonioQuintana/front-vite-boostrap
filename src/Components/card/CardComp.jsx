@@ -1,7 +1,16 @@
 import { Card, Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/actions';
 import './CardStyle.css';
 
 function CardComp({ product }) {
+    const dispatch = useDispatch();
+
+    const handleAddToCart = () => {
+        dispatch(addToCart(product));
+        alert('Producto agregado al carrito!');
+    };
+
     return (
         <Card className="h-100">
             <Card.Img
@@ -21,7 +30,7 @@ function CardComp({ product }) {
                 </Card.Text>
                 <div className="mt-auto d-flex justify-content-between align-items-center">
                     <h5 className="mb-0 text-hw-blue">${product.price}</h5>
-                    <Button variant="primary" size="sm">
+                    <Button variant="primary" size="sm" onClick={handleAddToCart}>
                         Agregar +
                     </Button>
                 </div>

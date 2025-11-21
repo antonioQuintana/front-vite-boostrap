@@ -12,9 +12,12 @@ function AppNavbar() {
   const user = useSelector(state => state.user);
   console.log(user);
   return (
-    <Navbar expand="md" data-bs-theme="dark" className="bg-body-tertiary">
-      <Container fluid>
-        <Navbar.Brand href="/">CtesWheels</Navbar.Brand>
+    <Navbar expand="md" className="navbar-dark">
+      < Container fluid >
+        <Navbar.Brand href="/">
+          <span style={{ color: 'var(--hw-yellow)' }}>Ctes</span>
+          <span style={{ color: 'var(--hw-white)' }}>Wheels</span>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -57,8 +60,8 @@ function AppNavbar() {
             <Button variant="outline-success">Buscar</Button>
           </Form>
         </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      </Container >
+    </Navbar >
   );
 }
 

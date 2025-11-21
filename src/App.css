@@ -1,44 +1,109 @@
-#root {
-  margin: 0 auto;
-  padding: 0;
-  text-align: center;
+:root {
+  --hw-orange: #FF4500;
+  --hw-blue: #0066B2;
+  --hw-yellow: #FFD700;
+  --hw-black: #1a1a1a;
+  --hw-white: #ffffff;
+  --font-racing: 'Racing Sans One', cursive;
+  --font-body: 'Roboto', sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: #f0f0f0;
+  color: var(--hw-black);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+  font-family: var(--font-racing);
+  text-transform: uppercase;
+  font-style: italic;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Buttons */
+.btn-primary {
+  background-color: var(--hw-blue);
+  border-color: var(--hw-blue);
+  font-family: var(--font-racing);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+.btn-primary:hover {
+  background-color: #00509e;
+  border-color: #00509e;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.btn-warning {
+  background-color: var(--hw-yellow);
+  border-color: var(--hw-yellow);
+  color: var(--hw-black);
+  font-family: var(--font-racing);
 }
 
+.btn-danger {
+  background-color: var(--hw-orange);
+  border-color: var(--hw-orange);
+  font-family: var(--font-racing);
+}
+
+/* Card Styling */
 .card {
-  padding: 2em;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
-.read-the-docs {
-  color: #888;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Navbar Customization */
+.navbar {
+  background: linear-gradient(90deg, var(--hw-blue) 0%, #004080 100%) !important;
+  border-bottom: 4px solid var(--hw-orange);
+}
+
+.navbar-brand {
+  color: var(--hw-yellow) !important;
+  font-size: 1.8rem;
+  text-shadow: 2px 2px 0px #000;
+}
+
+.nav-link {
+  color: var(--hw-white) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.nav-link:hover {
+  color: var(--hw-yellow) !important;
+}
+
+/* Utility */
+.text-hw-orange {
+  color: var(--hw-orange);
+}
+
+.text-hw-blue {
+  color: var(--hw-blue);
+}
+
+.bg-hw-orange {
+  background-color: var(--hw-orange);
+}
+
+/* App Container */
+.app-container {
+  padding: 2rem;
 }

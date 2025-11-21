@@ -5,6 +5,7 @@ import About from "./Components/About";
 import AppFooter from "./Components/AppFooter";
 import "./App.css";
 import Productos from "./Pages/Productos";
+import Carrito from "./Components/Carrito/Carrito";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getUsers, getProducts, setUser } from "./redux/actions";
@@ -36,6 +37,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tienda" element={<Productos />} />
+          <Route path="/carrito" element={<Carrito />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>
