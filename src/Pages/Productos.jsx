@@ -29,7 +29,7 @@ function Productos() {
     if (products.length === 0) {
         return (
             <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
-                <Spinner animation="border" variant="warning" />
+                <Spinner animation="border" variant="primary" />
             </Container>
         );
     }

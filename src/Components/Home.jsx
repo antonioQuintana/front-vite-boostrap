@@ -3,7 +3,7 @@ import LoginButton from "../AuthComponents/LoginButton";
 import LogoutButton from "../AuthComponents/LogoutButton";
 import Profile from "../AuthComponents/Profile";
 import { useSelector } from 'react-redux';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardComp from './card/CardComp';
 
@@ -14,11 +14,9 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="app-container">
-        <div className="loading-state">
-          <div className="loading-text">Loading...</div>
-        </div>
-      </div>
+      <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+        <Spinner animation="border" variant="primary" />
+      </Container>
     );
   }
 

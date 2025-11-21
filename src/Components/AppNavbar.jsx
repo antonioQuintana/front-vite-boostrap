@@ -6,6 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function AppNavbar() {
   const { logout } = useAuth0();
@@ -14,7 +15,7 @@ function AppNavbar() {
   return (
     <Navbar expand="md" className="navbar-dark">
       < Container fluid >
-        <Navbar.Brand href="/">
+        <Navbar.Brand as={Link} to="/">
           <span style={{ color: 'var(--hw-yellow)' }}>Ctes</span>
           <span style={{ color: 'var(--hw-white)' }}>Wheels</span>
         </Navbar.Brand>
@@ -25,14 +26,14 @@ function AppNavbar() {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="/tienda">Tienda</Nav.Link>
-            <Nav.Link href="/carrito">Carrito</Nav.Link>
+            <Nav.Link as={Link} to="/tienda">Tienda</Nav.Link>
+            <Nav.Link as={Link} to="/carrito">Carrito</Nav.Link>
             <NavDropdown title="Perfil" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="/compras">Mis Compras</NavDropdown.Item>
-              <NavDropdown.Item href="/notificaciones">
+              <NavDropdown.Item as={Link} to="/compras">Mis Compras</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/notificaciones">
                 Notificaciones
               </NavDropdown.Item>
-              <NavDropdown.Item href="/mi-perfil">
+              <NavDropdown.Item as={Link} to="/mi-perfil">
                 Editar Perfil
               </NavDropdown.Item>
               <NavDropdown.Divider />
@@ -57,7 +58,7 @@ function AppNavbar() {
               className="me-2"
               aria-label="Search"
             />
-            <Button variant="outline-success">Buscar</Button>
+            <Button variant="warning">Buscar</Button>
           </Form>
         </Navbar.Collapse>
       </Container >

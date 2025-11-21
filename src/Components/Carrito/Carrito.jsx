@@ -6,6 +6,7 @@ import { removeFromCart, clearCart } from '../../redux/actions';
 const Carrito = () => {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
+    console.log(cart)
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 

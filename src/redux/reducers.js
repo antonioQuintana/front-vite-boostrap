@@ -14,7 +14,7 @@ const initialState = {
     copyProducts: [],
     user: null,
     currentPage: 1, // Página actual global
-    cart: []
+    cart: JSON.parse(localStorage.getItem('cart')) || []
 }
 
 const reducer = (state = initialState, action) => {
@@ -41,31 +41,42 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 currentPage: action.payload
             }
-        case ADD_TO_CART:
-            const itemInCart = state.cart.find(item => item.id === action.payload.id);
-            return itemInCart
-                ? {
-                    ...state,
-                    cart: state.cart.map(item =>
-                        item.id === action.payload.id
-                            ? { ...item, quantity: item.quantity + 1 }
-                            : item
-                    ),
-                }
-                : {
-                    ...state,
-                    cart: [...state.cart, { ...action.payload, quantity: 1 }],
-                };
-        case REMOVE_FROM_CART:
+        /* case GET_CART:
             return {
                 ...state,
-                cart: state.cart.filter((item) => item.id !== action.payload),
-            };
+                cart: action.payload,
+            } */
+        case ADD_TO_CART:
+            console.log(action)
+            const itemInCart = state.cart.find(item => item.id === action.payload.id);
+            let newCart;
+            if (itemInCart) {
+                newCart = state.cart.map(item =>
+                    item.id === action.payload.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            } else {
+                newCart = [...state.cart, { ...action.payload, quantity: 1 }];
+            }
+            localStorage.setItem('cart', JSON.stringify(newCart));
+            return {
+                ...state,
+                cart: newCart,
+            }
+        case REMOVE_FROM_CART:
+            const newCartRemove = state.cart.filter((item) => item.id !== action.payload);
+            localStorage.setItem('cart', JSON.stringify(newCartRemove));
+            return {
+                ...state,
+                cart: newCartRemove,
+            }
         case CLEAR_CART:
+            localStorage.removeItem('cart');
             return {
                 ...state,
                 cart: [],
-            };
+            }
         default:
             return { ...state }
     }
