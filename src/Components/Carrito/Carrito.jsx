@@ -63,7 +63,7 @@ const Carrito = () => {
                                     <Button
                                         variant="danger"
                                         size="sm"
-                                        onClick={() => handleRemove(item.id)}
+                                        onClick={() => handleRemove(item._id)}
                                     >
                                         X
                                     </Button>

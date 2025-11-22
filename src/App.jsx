@@ -10,8 +10,9 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getUsers, getProducts, setUser } from "./redux/actions";
 import { useAuth0 } from "@auth0/auth0-react";
-import ProductForm from "./Components/productForm/productForm";
 import NotFound from "./Components/PagNotFound/NotFoundPage";
+import ListaAdmin from "./Components/ListaAdmin/ListaAdmin";
+import ProductForm from "./Components/productForm/productForm";
 
 function App() {
   const { user, isAuthenticated } = useAuth0();
@@ -41,7 +42,8 @@ function App() {
           <Route path="/tienda" element={<Productos />} />
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/about" element={<About />} />
-          <Route path="/admin" element={<ProductForm />} />
+          <Route path="/admin" element={<ListaAdmin />} />
+          <Route path="/admin/nuevo" element={<ProductForm />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

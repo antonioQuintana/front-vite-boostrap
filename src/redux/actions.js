@@ -35,7 +35,7 @@ export const getProducts = () => {
         }
     };
 };
-
+export const POST_PRODUCT = "POST_PRODUCT";
 export const postProduct = (product) => {
     return async (dispatch) => {
         try {
@@ -50,7 +50,36 @@ export const postProduct = (product) => {
         }
     };
 };
-export const POST_PRODUCT = "POST_PRODUCT";
+
+export const PUT_PRODUCT = "PUT_PRODUCT";
+export const putProduct = (product) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.put(`/api/products/${product._id}`, product);
+            const updatedProduct = response.data;
+            dispatch({
+                type: PUT_PRODUCT,
+                payload: updatedProduct
+            });
+        } catch (error) {
+            console.error("Error al actualizar producto:", error);
+        }
+    };
+};
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const deleteProduct = (_id) => {
+    return async (dispatch) => {
+        try {
+            await axios.delete(`/api/products/${_id}`);
+            dispatch({
+                type: DELETE_PRODUCT,
+                payload: _id
+            });
+        } catch (error) {
+            console.error("Error al eliminar producto:", error);
+        }
+    };
+};
 
 export const SET_USER = "SET_USER";
 

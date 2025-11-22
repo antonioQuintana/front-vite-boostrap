@@ -1,18 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
-import NotFound from '../PagNotFound/NotFoundPage';
 import CardComp from '../card/CardComp';
-import { postProduct } from '../../redux/actions';
+import { putProduct } from '../../redux/actions';
 
-const ProductForm = () => {
+const EditForm = ({ _id }) => {
     const dispatch = useDispatch();
-
-    const user = useSelector(state => state.user);
-    if (!user || !user.isAdmin) {
-        return <NotFound />;
-    }
-
+    const products = useSelector(state => state.products);
     const preset_name = "CtesWheels";
     const cloud_name = "dhatmlle3"
 
@@ -24,6 +18,17 @@ const ProductForm = () => {
 
     // 1. Estado para almacenar los datos del formulario
     const [productData, setProductData] = useState({});
+
+    useEffect(() => {
+        if (_id) {
+            const productToEdit = products.find(p => p._id === _id);
+            if (productToEdit) {
+                setProductData(productToEdit);
+                setImage(productToEdit.imgDir);
+            }
+        }
+    }, [_id, products]);
+
     /**
      * Sube la imagen al servidor de Cloudinary
      * @param file archivo que se sube
@@ -79,12 +84,6 @@ const ProductForm = () => {
         });
     };
 
-    /**
-     * Manejador para el envío del formulario, llama a la funcion uploadImageToCloudinary para subir la imagen
-     * recien cuando se aprete el botton, setea el estado de loading y la ventana flotante "modal",
-     * tambien guarda el producto para despachar a la database
-     * @param e evento que recibe 
-     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -106,7 +105,7 @@ const ProductForm = () => {
             imgDir: imageUrl || productData.imgDir
         };
         setCreatedProduct(finalProductData);
-        dispatch(postProduct(finalProductData));
+        dispatch(putProduct(finalProductData));
         setLoading(false);
         setShowModal(true);
     };
@@ -124,7 +123,7 @@ const ProductForm = () => {
 
         < div className="container mt-5" >
             <div className="card shadow p-4">
-                <h2 className="card-title text-center mb-4">Cargar Producto</h2>
+                <h2 className="card-title text-center mb-4">Editar Producto</h2>
                 <form onSubmit={handleSubmit}>
 
                     {/* Campo: Name */}
@@ -243,10 +242,10 @@ const ProductForm = () => {
             {/* Modal de éxito */}
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>¡Producto Creado!</Modal.Title>
+                    <Modal.Title>¡Producto Editado!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p className="text-center mb-3">El producto se ha cargado exitosamente.</p>
+                    <p className="text-center mb-3">El producto se ha editado exitosamente.</p>
                     {createdProduct && (
                         <div className="d-flex justify-content-center">
                             <div style={{ width: '18rem' }}>
@@ -265,4 +264,4 @@ const ProductForm = () => {
     );
 };
 
-export default ProductForm;
+export default EditForm;

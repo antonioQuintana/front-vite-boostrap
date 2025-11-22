@@ -5,7 +5,11 @@
  * 2. La accion
  * 
  */
-import { GET_USERS, GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE, ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT } from "./actions";
+import {
+    GET_USERS, GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE,
+    ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT, PUT_PRODUCT,
+    DELETE_PRODUCT
+} from "./actions";
 
 const initialState = {
     users: [],
@@ -48,11 +52,11 @@ const reducer = (state = initialState, action) => {
             } */
         case ADD_TO_CART:
 
-            const itemInCart = state.cart.find(item => item.id === action.payload.id);
+            const itemInCart = state.cart.find(item => item._id === action.payload._id);
             let newCart;
             if (itemInCart) {
                 newCart = state.cart.map(item =>
-                    item.id === action.payload.id
+                    item._id === action.payload._id
                         ? { ...item, quantity: item.quantity + 1 }
                         : item
                 );
@@ -65,7 +69,7 @@ const reducer = (state = initialState, action) => {
                 cart: newCart,
             }
         case REMOVE_FROM_CART:
-            const newCartRemove = state.cart.filter((item) => item.id !== action.payload);
+            const newCartRemove = state.cart.filter((item) => item._id !== action.payload);
             localStorage.setItem('cart', JSON.stringify(newCartRemove));
             return {
                 ...state,
@@ -81,6 +85,20 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 products: [...state.products, action.payload]
+            }
+        case PUT_PRODUCT:
+            return {
+                ...state,
+                products: state.products.map(product =>
+                    product._id === action.payload._id ? action.payload : product
+                )
+            }
+        case DELETE_PRODUCT:
+            return {
+                ...state,
+                products: state.products.filter(product =>
+                    product._id !== action.payload
+                )
             }
         default:
             return { ...state }
