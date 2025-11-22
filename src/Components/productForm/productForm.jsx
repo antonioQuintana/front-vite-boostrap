@@ -1,23 +1,67 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Modal, Button } from 'react-bootstrap';
 import NotFound from '../PagNotFound/NotFoundPage';
+import CardComp from '../card/CardComp';
+import { postProduct } from '../../redux/actions';
 
 const ProductForm = () => {
+    const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     if (!user || !user.isAdmin) {
         return <NotFound />;
     }
+
+    const preset_name = "CtesWheels";
+    const cloud_name = "dhatmlle3"
+
+    const [image, setImage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [createdProduct, setCreatedProduct] = useState(null);
+
     // 1. Estado para almacenar los datos del formulario
     const [productData, setProductData] = useState({});
+
+    const uploadImageToCloudinary = async (file) => {
+        const data = new FormData();
+        data.append('file', file);
+        data.append('upload_preset', preset_name);
+
+        try {
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+                method: 'POST',
+                body: data
+            });
+
+            const fileData = await response.json();
+            return fileData.secure_url;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    }
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            // Create a local preview URL
+            const previewUrl = URL.createObjectURL(file);
+            setImage(previewUrl);
+        }
+    };
 
     // 2. Manejador genérico para la entrada de datos
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 
-        // Convertir a número si el campo es 'price' o 'stock'
-        const newValue = (name === 'price' || name === 'stock')
-            ? parseFloat(value)
-            : value;
+        let newValue;
+
+        (name === 'price' || name === 'stock')
+            ? newValue = parseFloat(value)
+            : newValue = value;
 
         setProductData({
             ...productData,
@@ -26,24 +70,38 @@ const ProductForm = () => {
     };
 
     // 3. Manejador para el envío del formulario
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
-        console.log('Datos del Producto a enviar:', productData);
+        let imageUrl = '';
 
-        // Aquí es donde normalmente enviarías 'productData' a una API o a tu lógica de estado global
+        if (selectedFile) {
+            try {
+                imageUrl = await uploadImageToCloudinary(selectedFile);
+            } catch (error) {
+                alert('Error al subir la imagen. Inténtalo de nuevo.');
+                setLoading(false);
+                return;
+            }
+        }
 
-        alert(`Producto ${productData.name} listo para cargar. Revisa la consola.`);
+        const finalProductData = {
+            ...productData,
+            imgDir: imageUrl || productData.imgDir
+        };
+        setCreatedProduct(finalProductData);
+        dispatch(postProduct(finalProductData));
+        setLoading(false);
+        setShowModal(true);
+    };
 
-        // Opcional: limpiar el formulario después del envío
-        // setProductData({
-        //   name: '',
-        //   description: '',
-        //   price: 0,
-        //   stock: 0,
-        //   category: '',
-        //   imgDir: '',
-        // });
+    const handleCloseModal = () => {
+        setShowModal(false);
+        // Reset form if desired
+        setProductData({});
+        setImage('');
+        setSelectedFile(null);
     };
 
     return (
@@ -60,7 +118,7 @@ const ProductForm = () => {
                             className="form-control"
                             id="name"
                             name="name"
-                            value={productData.name}
+                            value={productData.name || ''}
                             onChange={handleInputChange}
                             required
                         />
@@ -74,7 +132,7 @@ const ProductForm = () => {
                             id="description"
                             name="description"
                             rows="3"
-                            value={productData.description}
+                            value={productData.description || ''}
                             onChange={handleInputChange}
                             required
                         ></textarea>
@@ -91,7 +149,7 @@ const ProductForm = () => {
                                     className="form-control"
                                     id="price"
                                     name="price"
-                                    value={productData.price}
+                                    value={productData.price || ''}
                                     onChange={handleInputChange}
                                     min="0"
                                     step="0.01" // Permite decimales
@@ -108,7 +166,7 @@ const ProductForm = () => {
                                 className="form-control"
                                 id="stock"
                                 name="stock"
-                                value={productData.stock}
+                                value={productData.stock || ''}
                                 onChange={handleInputChange}
                                 min="0"
                                 required
@@ -124,7 +182,7 @@ const ProductForm = () => {
                             className="form-control"
                             id="category"
                             name="category"
-                            value={productData.category}
+                            value={productData.category || ''}
                             onChange={handleInputChange}
                             required
                         />
@@ -132,27 +190,60 @@ const ProductForm = () => {
 
                     {/* Campo: Image Directory (imgDir) */}
                     <div className="mb-4">
-                        <label htmlFor="imgDir" className="form-label">Ruta de Imagen (imgDir)</label>
+                        <label htmlFor="imgDir" className="form-label">Imagen del Producto</label>
                         <input
-                            type="text"
+                            type="file"
                             className="form-control"
                             id="imgDir"
                             name="imgDir"
-                            value={productData.imgDir}
-                            onChange={handleInputChange}
-                            placeholder="ej: /assets/porsche911.jpg"
+                            accept="image/*"
+                            onChange={handleFileChange}
                         />
-                        <small className="form-text text-muted">La ruta o URL de la imagen del producto.</small>
+                        <small className="form-text text-muted">Sube una imagen para el producto.</small>
+
+                        {/* Previsualización de la imagen */}
+                        {image && (
+                            <div className="mt-3 text-center">
+                                <img
+                                    src={image}
+                                    alt="Vista previa"
+                                    className="img-thumbnail"
+                                    style={{ height: '350px' }}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Botón de envío */}
                     <div className="d-grid gap-2">
-                        <button type="submit" className="btn btn-primary btn-lg">
-                            Guardar Producto
+                        <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+                            {loading ? 'Cargando...' : 'Guardar Producto'}
                         </button>
                     </div>
                 </form>
             </div>
+
+            {/* Modal de éxito */}
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>¡Producto Creado!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p className="text-center mb-3">El producto se ha cargado exitosamente.</p>
+                    {createdProduct && (
+                        <div className="d-flex justify-content-center">
+                            <div style={{ width: '18rem' }}>
+                                <CardComp product={createdProduct} />
+                            </div>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

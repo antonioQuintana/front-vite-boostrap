@@ -5,7 +5,7 @@
  * 2. La accion
  * 
  */
-import { GET_USERS, GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE, ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART } from "./actions";
+import { GET_USERS, GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE, ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT } from "./actions";
 
 const initialState = {
     users: [],
@@ -76,6 +76,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 cart: [],
+            }
+        case POST_PRODUCT:
+            return {
+                ...state,
+                products: [...state.products, action.payload]
             }
         default:
             return { ...state }

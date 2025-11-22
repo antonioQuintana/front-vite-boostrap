@@ -36,6 +36,22 @@ export const getProducts = () => {
     };
 };
 
+export const postProduct = (product) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post("/api/products", product);
+            const createdProduct = response.data;
+            dispatch({
+                type: POST_PRODUCT,
+                payload: createdProduct
+            });
+        } catch (error) {
+            console.error("Error al crear producto:", error);
+        }
+    };
+};
+export const POST_PRODUCT = "POST_PRODUCT";
+
 export const SET_USER = "SET_USER";
 
 export const setUser = (user) => {
