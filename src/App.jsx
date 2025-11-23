@@ -8,7 +8,7 @@ import Productos from "./Pages/Productos";
 import Carrito from "./Components/Carrito/Carrito";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getUsers, getProducts, setUser } from "./redux/actions";
+import { getProducts, postUser } from "./redux/actions";
 import { useAuth0 } from "@auth0/auth0-react";
 import NotFound from "./Components/PagNotFound/NotFoundPage";
 import ListaAdmin from "./Components/ListaAdmin/ListaAdmin";
@@ -19,17 +19,18 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
     dispatch(getProducts());
   }, [dispatch]);
 
   useEffect(() => {
     if (isAuthenticated && user) {
       const userData = {
-        ...user,
-        isAdmin: user.email === 'antonioquintanaprof@gmail.com'
+        name: user.name,
+        nickname: user.nickname,
+        email: user.email,
+        auth0Id: user.sub,
       };
-      dispatch(setUser(userData));
+      dispatch(postUser(userData));
     }
   }, [isAuthenticated, user, dispatch]);
 

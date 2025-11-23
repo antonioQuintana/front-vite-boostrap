@@ -4,15 +4,25 @@ import { Modal, Button } from 'react-bootstrap';
 import NotFound from '../PagNotFound/NotFoundPage';
 import CardComp from '../card/CardComp';
 import { postProduct } from '../../redux/actions';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const ProductForm = () => {
-    const dispatch = useDispatch();
+    const { isLoading, isAuthenticated } = useAuth0();
+    const user = useSelector(state => state.loguedUser);
 
-    const user = useSelector(state => state.user);
-    if (!user || !user.isAdmin) {
+    if (isLoading) {
+        return <div className="text-center mt-5">Loading...</div>;
+    }
+
+    if (isAuthenticated && !user) {
+        return <div className="text-center mt-5">Loading user data...</div>;
+    }
+
+    if (!user || user.role !== 'admin') {
         return <NotFound />;
     }
 
+    const dispatch = useDispatch();
     const preset_name = "CtesWheels";
     const cloud_name = "dhatmlle3"
 

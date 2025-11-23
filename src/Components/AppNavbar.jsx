@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import LogoutButton from "../AuthComponents/LogoutButton";
 
 function AppNavbar() {
-  const user = useSelector(state => state.user);
+  const loguedUser = useSelector(state => state.loguedUser);
 
   return (
     <Navbar expand="md" className="navbar-dark">
@@ -28,7 +28,7 @@ function AppNavbar() {
             <Nav.Link as={Link} to="/tienda">Tienda</Nav.Link>
             <Nav.Link as={Link} to="/carrito">Carrito</Nav.Link>
 
-            {user != null ? (
+            {loguedUser != null ? (
               <NavDropdown title="Perfil" id="navbarScrollingDropdown">
                 <NavDropdown.Item as={Link} to="/compras">Mis Compras</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/notificaciones">
@@ -41,10 +41,10 @@ function AppNavbar() {
                 <LogoutButton />
               </NavDropdown>
             ) : null}
-            {user != null && user.isAdmin ? (
+            {loguedUser != null && loguedUser.role === 'admin' ? (
               <Nav.Link as={Link} to="/admin">Admin</Nav.Link>
             ) : <Nav.Link href="#" disabled>
-              Bienvenido {user == null ? "" : user.name} !
+              Bienvenido {loguedUser == null ? "" : loguedUser.name} !
             </Nav.Link>}
 
           </Nav>

@@ -6,10 +6,21 @@ import { Link } from "react-router-dom";
 import { deleteProduct } from "../../redux/actions";
 import { Container, Card, Table, Row } from "react-bootstrap";
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function ListaAdmin() {
-    const user = useSelector(state => state.user);
-    if (!user || !user.isAdmin) {
+    const { isLoading, isAuthenticated } = useAuth0();
+    const user = useSelector(state => state.loguedUser);
+
+    if (isLoading) {
+        return <div className="text-center mt-5">Loading...</div>;
+    }
+
+    if (isAuthenticated && !user) {
+        return <div className="text-center mt-5">Loading user data...</div>;
+    }
+
+    if (!user || user.role !== 'admin') {
         return <NotFound />;
     }
 

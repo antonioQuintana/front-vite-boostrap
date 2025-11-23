@@ -7,11 +7,14 @@ import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardComp from './card/CardComp';
 
+
 const Home = () => {
+
+
   const products = useSelector(state => state.products);
   const featuredProducts = products.slice(0, 3); // Show first 3 products
-  const { isAuthenticated, isLoading, error } = useAuth0();
 
+  const { isAuthenticated, isLoading, } = useAuth0();
   if (isLoading) {
     return (
       <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
@@ -20,17 +23,6 @@ const Home = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="app-container">
-        <div className="error-state">
-          <div className="error-title">Oops!</div>
-          <div className="error-message">Something went wrong</div>
-          <div className="error-sub-message">{error.message}</div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="home-page">

@@ -4,19 +4,45 @@
  * tipo de accion
  * ¿que es el payload? Es el dato que se envia 
  */
-export const GET_USERS = "GET_USERS";
-export const GET_PRODUCTS = "GET_PRODUCTS";
 
+export const GET_PRODUCTS = "GET_PRODUCTS";
 import axios from "axios";
 
+/*export const GET_USERS = "GET_USERS";
 export const getUsers = () => {
     return async (dispatch) => {
         const users = (await axios.get("https://jsonplaceholder.typicode.com/users")).data
         dispatch({
             type: GET_USERS,
             payload: users
-        })/*Dispatch es un metodo que solicita la actualizacion del estado en redux, 
-            despacha la accion al reducer */
+        })//dispatch es un metodo que solicita la actualizacion del estado en redux, 
+            //despacha la accion al reducer 
+    };
+}; //####### es una mala practica de seguridad traer los usuarios al front, hayque derivar la tarea al backend #########
+*/
+
+export const POST_USER = "POST_USER";
+export const postUser = (user) => {
+    return async (dispatch) => {
+        try {
+            // 1. Intentamos obtener el usuario primero para evitar el error 400 de duplicado
+            const response = await axios.get(`/api/users/${user.email}`);
+            dispatch({
+                type: POST_USER,
+                payload: response.data
+            });
+        } catch (getError) {
+            // 2. Si falla el GET (probablemente porque no existe), intentamos crearlo
+            try {
+                const response = await axios.post("/api/users/", user);
+                dispatch({
+                    type: POST_USER,
+                    payload: response.data
+                });
+            } catch (postError) {
+                console.error("Error al crear usuario:", postError);
+            }
+        }
     };
 };
 
@@ -83,12 +109,6 @@ export const deleteProduct = (_id) => {
 
 export const SET_USER = "SET_USER";
 
-export const setUser = (user) => {
-    return {
-        type: SET_USER,
-        payload: user
-    }
-};
 
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 

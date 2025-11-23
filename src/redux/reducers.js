@@ -6,29 +6,22 @@
  * 
  */
 import {
-    GET_USERS, GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE,
+    GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE,
     ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT, PUT_PRODUCT,
-    DELETE_PRODUCT
+    DELETE_PRODUCT, POST_USER
 } from "./actions";
 
 const initialState = {
-    users: [],
-    copyUsers: [],
     products: [],
     copyProducts: [],
     user: null,
     currentPage: 1, // Página actual global
-    cart: JSON.parse(localStorage.getItem('cart')) || []
+    cart: JSON.parse(localStorage.getItem('cart')) || [],
+    loguedUser: null,
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_USERS:
-            return {
-                ...state, //"copiar" el estado actual
-                users: action.payload, //completar con el payload
-                copyUsers: action.payload //completar con el payload
-            }
         case GET_PRODUCTS:
             return {
                 ...state,
@@ -39,6 +32,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.payload
+            }
+        case POST_USER:
+            return {
+                ...state,
+                loguedUser: action.payload
             }
         case SET_CURRENT_PAGE:
             return {
