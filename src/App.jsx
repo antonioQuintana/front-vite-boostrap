@@ -29,6 +29,7 @@ function App() {
         nickname: user.nickname,
         email: user.email,
         auth0Id: user.sub,
+        picture: user.picture,
       };
       dispatch(postUser(userData));
     }

@@ -6,18 +6,17 @@
  * 
  */
 import {
-    GET_PRODUCTS, SET_USER, SET_CURRENT_PAGE,
+    GET_PRODUCTS, SET_CURRENT_PAGE,
     ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT, PUT_PRODUCT,
-    DELETE_PRODUCT, POST_USER
+    DELETE_PRODUCT, POST_USER, CLOSE_SESSION
 } from "./actions";
 
 const initialState = {
     products: [],
     copyProducts: [],
-    user: null,
     currentPage: 1, // Página actual global
     cart: JSON.parse(localStorage.getItem('cart')) || [],
-    loguedUser: null,
+    loguedUser: JSON.parse(localStorage.getItem('loguedUser')) || null,
 }
 
 const reducer = (state = initialState, action) => {
@@ -28,12 +27,8 @@ const reducer = (state = initialState, action) => {
                 products: action.payload,
                 copyProducts: action.payload
             }
-        case SET_USER:
-            return {
-                ...state,
-                user: action.payload
-            }
         case POST_USER:
+            localStorage.setItem('loguedUser', JSON.stringify(action.payload));
             return {
                 ...state,
                 loguedUser: action.payload
@@ -42,6 +37,12 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentPage: action.payload
+            }
+        case CLOSE_SESSION:
+            localStorage.removeItem('loguedUser');
+            return {
+                ...state,
+                loguedUser: null
             }
         /* case GET_CART:
             return {

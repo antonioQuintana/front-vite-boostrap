@@ -10,18 +10,19 @@ import CardComp from './card/CardComp';
 
 const Home = () => {
 
-
+  const loguedUser = useSelector(state => state.loguedUser);
   const products = useSelector(state => state.products);
   const featuredProducts = products.slice(0, 3); // Show first 3 products
 
-  const { isAuthenticated, isLoading, } = useAuth0();
+  /* const { isLoading } = useAuth0();
+
   if (isLoading) {
     return (
       <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
         <Spinner animation="border" variant="primary" />
       </Container>
     );
-  }
+  } */
 
 
   return (
@@ -42,7 +43,7 @@ const Home = () => {
             <span className="text-hw-yellow">VELOCIDAD</span> SIN LÍMITES
           </h1>
           <p className="lead mb-5 fs-3">La colección más exclusiva de Hot Wheels en Corrientes.</p>
-          {isAuthenticated ? (
+          {loguedUser ? (
             <div className="logged-in-section">
               <h5 className="logged-in-message">
                 ✅ Sesión inciada con éxito!

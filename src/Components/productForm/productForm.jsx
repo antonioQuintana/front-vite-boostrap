@@ -10,13 +10,13 @@ const ProductForm = () => {
     const { isLoading, isAuthenticated } = useAuth0();
     const user = useSelector(state => state.loguedUser);
 
-    if (isLoading) {
+    /* if (isLoading) {
         return <div className="text-center mt-5">Loading...</div>;
     }
 
     if (isAuthenticated && !user) {
         return <div className="text-center mt-5">Loading user data...</div>;
-    }
+    } */
 
     if (!user || user.role !== 'admin') {
         return <NotFound />;

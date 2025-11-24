@@ -29,7 +29,7 @@ export const postUser = (user) => {
             const response = await axios.get(`/api/users/${user.email}`);
             dispatch({
                 type: POST_USER,
-                payload: response.data
+                payload: { ...response.data, picture: response.data.picture || user.picture }
             });
         } catch (getError) {
             // 2. Si falla el GET (probablemente porque no existe), intentamos crearlo
@@ -37,7 +37,7 @@ export const postUser = (user) => {
                 const response = await axios.post("/api/users/", user);
                 dispatch({
                     type: POST_USER,
-                    payload: response.data
+                    payload: { ...response.data, picture: user.picture }
                 });
             } catch (postError) {
                 console.error("Error al crear usuario:", postError);
@@ -45,7 +45,12 @@ export const postUser = (user) => {
         }
     };
 };
-
+export const CLOSE_SESSION = "CLOSE_SESSION";
+export const closeSession = () => {
+    return {
+        type: CLOSE_SESSION
+    }
+}
 export const getProducts = () => {
     return async (dispatch) => {
         try {
@@ -106,9 +111,6 @@ export const deleteProduct = (_id) => {
         }
     };
 };
-
-export const SET_USER = "SET_USER";
-
 
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 
