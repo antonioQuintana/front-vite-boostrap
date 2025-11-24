@@ -4,10 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentPage } from '../redux/actions';
 import CardComp from '../Components/card/CardComp';
 import ProductsPag from '../Components/productsPag/ProductsPag';
+import OrderBar from '../Components/orderbar/orderBar';
 
 function Productos() {
     const dispatch = useDispatch();
-    const products = useSelector(state => state.products);
+    const products = useSelector(state => state.copyProducts);
+
     const currentPage = useSelector(state => state.currentPage);
 
     // 1. Definir items por página
@@ -36,9 +38,10 @@ function Productos() {
 
     return (
         <Container className="py-5">
-            <h2 className="text-center mb-4 text-hw-orange" style={{ fontFamily: 'var(--font-racing)' }}>
+            <h2 className="text-center mb-2 text-hw-orange" style={{ fontFamily: 'var(--font-racing)' }}>
                 Catálogo Oficial
             </h2>
+            <OrderBar />
             <Row>
                 {currentProducts.map(product => (
                     <Col key={product._id} md={4} lg={3} className="mb-4">

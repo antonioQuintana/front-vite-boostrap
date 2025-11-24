@@ -8,7 +8,7 @@
 import {
     GET_PRODUCTS, SET_CURRENT_PAGE,
     ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT, PUT_PRODUCT,
-    DELETE_PRODUCT, POST_USER, CLOSE_SESSION, POST_ORDER, SOLD_CART
+    DELETE_PRODUCT, POST_USER, CLOSE_SESSION, POST_ORDER, SOLD_CART, SORT_PRODUCTS
 } from "./actions";
 
 const initialState = {
@@ -34,6 +34,22 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 products: productsWithAdjustedStock,
                 copyProducts: productsWithAdjustedStock
+            }
+        case SORT_PRODUCTS:
+
+            const sortedProducts = [...state.copyProducts].sort((a, b) => {
+                const priceA = parseFloat(a.price);
+                const priceB = parseFloat(b.price);
+                if (action.payload === "asc") {
+                    return priceA - priceB
+                } else {
+                    return priceB - priceA
+                }
+            })
+            return {
+                ...state,
+                copyProducts: sortedProducts,
+                currentPage: 1 // Reset to first page when sorting
             }
         case POST_USER:
             localStorage.setItem('loguedUser', JSON.stringify(action.payload));
@@ -66,8 +82,13 @@ const reducer = (state = initialState, action) => {
             }
             localStorage.setItem('cart', JSON.stringify(newCart));
 
-            // Update local stock
+            // Update local stock in both lists independently to preserve order
             const updatedProductsAdd = state.products.map(product =>
+                product._id === action.payload._id
+                    ? { ...product, stock: product.stock - 1 }
+                    : product
+            );
+            const updatedCopyProductsAdd = state.copyProducts.map(product =>
                 product._id === action.payload._id
                     ? { ...product, stock: product.stock - 1 }
                     : product
@@ -77,7 +98,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 cart: newCart,
                 products: updatedProductsAdd,
-                copyProducts: updatedProductsAdd
+                copyProducts: updatedCopyProductsAdd
             }
         case REMOVE_FROM_CART:
             const itemToRemove = state.cart.find(item => item._id === action.payload);
@@ -86,8 +107,13 @@ const reducer = (state = initialState, action) => {
             const newCartRemove = state.cart.filter((item) => item._id !== action.payload);
             localStorage.setItem('cart', JSON.stringify(newCartRemove));
 
-            // Restore local stock
+            // Restore local stock in both lists
             const updatedProductsRemove = state.products.map(product =>
+                product._id === action.payload
+                    ? { ...product, stock: product.stock + quantityRestored }
+                    : product
+            );
+            const updatedCopyProductsRemove = state.copyProducts.map(product =>
                 product._id === action.payload
                     ? { ...product, stock: product.stock + quantityRestored }
                     : product
@@ -97,11 +123,17 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 cart: newCartRemove,
                 products: updatedProductsRemove,
-                copyProducts: updatedProductsRemove
+                copyProducts: updatedCopyProductsRemove
             }
         case CLEAR_CART:
-            // Restore all stock
+            // Restore all stock in both lists
             const updatedProductsClear = state.products.map(product => {
+                const cartItem = state.cart.find(item => item._id === product._id);
+                return cartItem
+                    ? { ...product, stock: product.stock + cartItem.quantity }
+                    : product;
+            });
+            const updatedCopyProductsClear = state.copyProducts.map(product => {
                 const cartItem = state.cart.find(item => item._id === product._id);
                 return cartItem
                     ? { ...product, stock: product.stock + cartItem.quantity }
@@ -113,7 +145,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 cart: [],
                 products: updatedProductsClear,
-                copyProducts: updatedProductsClear
+                copyProducts: updatedCopyProductsClear
             }
         case SOLD_CART:
             localStorage.removeItem('cart');

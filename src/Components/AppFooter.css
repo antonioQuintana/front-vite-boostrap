@@ -1,0 +1,56 @@
+.footer-container {
+    background-color: var(--hw-blue);
+    /* Fondo oscuro */
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-top: 4px solid var(--hw-orange);
+    width: 100%;
+    box-sizing: border-box;
+    /* Asegura que padding no añada ancho extra */
+}
+
+.footer-social-links {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    /* Espacio entre los íconos */
+}
+
+.social-icon {
+    color: white;
+    /* Color inicial de los íconos */
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-flex;
+    /* Para centrar mejor el ícono */
+    padding: 5px;
+    /* Área de click más grande */
+}
+
+/* Efectos hover para cada red social */
+.social-icon:hover {
+    transform: translateY(-3px);
+    /* Pequeño levantamiento al pasar el ratón */
+}
+
+.instagram:hover {
+    color: #e95950;
+    /* Color distintivo de Instagram */
+}
+
+.linkedin:hover {
+    color: #0077b5;
+    /* Color distintivo de LinkedIn */
+}
+
+.github:hover {
+    color: #6e5494;
+    /* Color distintivo de GitHub (o simplemente blanco/gris) */
+}
+
+.footer-copyright {
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0.8;
+}

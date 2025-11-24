@@ -66,6 +66,13 @@ export const getProducts = () => {
         }
     };
 };
+export const SORT_PRODUCTS = "SORT_PRODUCTS";
+export const sortProducts = (order) => {
+    return {
+        type: SORT_PRODUCTS,
+        payload: order
+    }
+}
 export const POST_PRODUCT = "POST_PRODUCT";
 export const postProduct = (product) => {
     return async (dispatch) => {
