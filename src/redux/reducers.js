@@ -8,7 +8,7 @@
 import {
     GET_PRODUCTS, SET_CURRENT_PAGE,
     ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART, POST_PRODUCT, PUT_PRODUCT,
-    DELETE_PRODUCT, POST_USER, CLOSE_SESSION
+    DELETE_PRODUCT, POST_USER, CLOSE_SESSION, POST_ORDER, SOLD_CART
 } from "./actions";
 
 const initialState = {
@@ -17,15 +17,23 @@ const initialState = {
     currentPage: 1, // Página actual global
     cart: JSON.parse(localStorage.getItem('cart')) || [],
     loguedUser: JSON.parse(localStorage.getItem('loguedUser')) || null,
+    order: [],
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_PRODUCTS:
+            // Calculate stock based on current cart
+            const productsWithAdjustedStock = action.payload.map(product => {
+                const cartItem = state.cart.find(item => item._id === product._id);
+                return cartItem
+                    ? { ...product, stock: product.stock - cartItem.quantity }
+                    : product;
+            });
             return {
                 ...state,
-                products: action.payload,
-                copyProducts: action.payload
+                products: productsWithAdjustedStock,
+                copyProducts: productsWithAdjustedStock
             }
         case POST_USER:
             localStorage.setItem('loguedUser', JSON.stringify(action.payload));
@@ -44,13 +52,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loguedUser: null
             }
-        /* case GET_CART:
-            return {
-                ...state,
-                cart: action.payload,
-            } */
         case ADD_TO_CART:
-
             const itemInCart = state.cart.find(item => item._id === action.payload._id);
             let newCart;
             if (itemInCart) {
@@ -63,18 +65,57 @@ const reducer = (state = initialState, action) => {
                 newCart = [...state.cart, { ...action.payload, quantity: 1 }];
             }
             localStorage.setItem('cart', JSON.stringify(newCart));
+
+            // Update local stock
+            const updatedProductsAdd = state.products.map(product =>
+                product._id === action.payload._id
+                    ? { ...product, stock: product.stock - 1 }
+                    : product
+            );
+
             return {
                 ...state,
                 cart: newCart,
+                products: updatedProductsAdd,
+                copyProducts: updatedProductsAdd
             }
         case REMOVE_FROM_CART:
+            const itemToRemove = state.cart.find(item => item._id === action.payload);
+            const quantityRestored = itemToRemove ? itemToRemove.quantity : 0;
+
             const newCartRemove = state.cart.filter((item) => item._id !== action.payload);
             localStorage.setItem('cart', JSON.stringify(newCartRemove));
+
+            // Restore local stock
+            const updatedProductsRemove = state.products.map(product =>
+                product._id === action.payload
+                    ? { ...product, stock: product.stock + quantityRestored }
+                    : product
+            );
+
             return {
                 ...state,
                 cart: newCartRemove,
+                products: updatedProductsRemove,
+                copyProducts: updatedProductsRemove
             }
         case CLEAR_CART:
+            // Restore all stock
+            const updatedProductsClear = state.products.map(product => {
+                const cartItem = state.cart.find(item => item._id === product._id);
+                return cartItem
+                    ? { ...product, stock: product.stock + cartItem.quantity }
+                    : product;
+            });
+
+            localStorage.removeItem('cart');
+            return {
+                ...state,
+                cart: [],
+                products: updatedProductsClear,
+                copyProducts: updatedProductsClear
+            }
+        case SOLD_CART:
             localStorage.removeItem('cart');
             return {
                 ...state,
@@ -98,6 +139,11 @@ const reducer = (state = initialState, action) => {
                 products: state.products.filter(product =>
                     product._id !== action.payload
                 )
+            }
+        case POST_ORDER:
+            return {
+                ...state,
+                order: [...state.order, action.payload]
             }
         default:
             return { ...state }

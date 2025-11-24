@@ -21,7 +21,7 @@ function CardComp({ product }) {
             <Card.Body className="d-flex flex-column">
                 <Card.Title>{product.name}</Card.Title>
                 <Card.Text className="text-muted small">
-                    {product.category}
+                    {product.category} - Quedan {product.stock}
                 </Card.Text>
                 <Card.Text>
                     {product.description.length > 40
@@ -30,9 +30,14 @@ function CardComp({ product }) {
                 </Card.Text>
                 <div className="mt-auto d-flex justify-content-between align-items-center">
                     <h5 className="mb-0 text-hw-blue">${product.price}</h5>
-                    <Button variant="primary" size="sm" onClick={handleAddToCart}>
-                        Agregar +
-                    </Button>
+                    {product.stock > 0
+                        ? <Button variant="primary" size="sm" onClick={handleAddToCart}>
+                            Agregar +
+                        </Button>
+                        : <Button variant="warning" size="sm">
+                            Sin Stock
+                        </Button>
+                    }
                 </div>
             </Card.Body>
         </Card>

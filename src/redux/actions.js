@@ -111,7 +111,21 @@ export const deleteProduct = (_id) => {
         }
     };
 };
-
+export const POST_ORDER = "POST_ORDER";
+export const postOrder = (order) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post("/api/order", order);
+            const createdOrder = response.data;
+            dispatch({
+                type: POST_ORDER,
+                payload: createdOrder
+            });
+        } catch (error) {
+            console.error("Error al crear orden:", error);
+        }
+    };
+};
 export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 
 export const setCurrentPage = (page) => {
@@ -148,3 +162,10 @@ export const clearCart = () => {
         type: CLEAR_CART
     }
 };
+export const SOLD_CART = "SOLD_CART";
+export const soldCart = () => {
+    return {
+        type: SOLD_CART
+    }
+};
+

@@ -38,7 +38,7 @@ function AppNavbar() {
                   Editar Perfil
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <LogoutButton />
+                <NavDropdown.Item><LogoutButton /></NavDropdown.Item>
               </NavDropdown>
             ) : null}
             {loguedUser != null && loguedUser.role === 'admin' ? (
